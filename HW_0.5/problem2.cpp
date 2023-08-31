@@ -1,3 +1,12 @@
+/**
+ * @file problem2.cpp
+ * @author Jason Moss
+ * @date 2023-08-31
+ * @brief Makeup for problems 2 and 3
+ * 
+ * A program that dynamically creates an array of ints. It reads from a file into an array. It then prints and finds the average.
+ */
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -6,8 +15,41 @@ using namespace std;
 
 
 
+
+/**
+ * Reads info from a file into the array
+ *
+ * @param int* array a pointer for an int array
+ * @param int MAX_ARRAY Array length
+ * @pre an array has been declared. The user has been prompted for the array length
+ * @return int *array
+ * @post info from the file has been read into the array
+ * 
+ */
 int arrayFill(int* array, int MAX_ARRAY);
+
+/**
+ * prints out the contents of the array to the screen
+ *
+ * @param int* array an array of integers
+ * @param int MAX_ARRAY array length
+ * @pre the user has been asked for the array length. The array has been declared.
+ * @return void 
+ * @post The contents are printed to the screen
+ * 
+ */
 void arrayPrint(int* array, int MAX_ARRAY);
+
+/**
+ * finds the average of the array
+ *
+ * @param int* array an array of integers
+ * @param int MAX_ARRAY array length
+ * @pre an array of ints has been declared. The user has been asked for the array length.
+ * @return float average
+ * @post The average has been found
+ * 
+ */
 float arrayAverage(int* array, int MAX_ARRAY);
 
 int main() {

@@ -87,3 +87,5 @@ float arrayAverage(int* array){
   average = sum / MAX_ARRAY;
   return average;
 }
+
+#endif //PROBLEM1_CPP
