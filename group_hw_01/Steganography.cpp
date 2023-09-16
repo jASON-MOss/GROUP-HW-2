@@ -16,16 +16,29 @@ using namespace std;
 
 int getNthBit(char cipherChar, int n){}
 
-void readImage(string fileName){}
+void Steganography::readImage(string fileName){}
 
-void printImage(string fileName){}
+void Steganography::printImage(string fileName){}
 
-void readCipherText(string fileName){}
+void Steganography::readCipherText(string fileName){
+  ifstream myFile;
+  myFile.open(fileName);
+  getline(myFile, magicNumber);
+  myFile >> height;
+  myFile >> width;
+  myFile >> maxColor;
+  cout << "magic number: " << magicNumber << endl;
+  cout << "height: " << height << endl;
+  cout << "width: " << width << endl;
+  cout << "max color: " << maxColor << endl;
 
-void printCipherText(string fileName){}
+  myFile.close();
+}
 
-void cleanImage(){}
+void Steganography::printCipherText(string fileName){}
 
-void encipher(){}
+void Steganography::cleanImage(){}
 
-void decipher(){}
+void Steganography::encipher(){}
+
+void Steganography::decipher(){}

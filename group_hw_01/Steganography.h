@@ -20,13 +20,14 @@ class Steganography{
   string magicNumber;
   int width;
   int height;
-  int macColor;
+  int maxColor;
   vector<int> colorData;
   string cipherText;
   int getNthBit(char cipherChar, int n);
  public:
   void readImage(string fileName);
   void printImage(string fileName);
+  void readCipherText(string fileName);
   void printCipherText(string fileName);
   void cleanImage();
   void encipher();
