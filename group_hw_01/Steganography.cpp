@@ -33,6 +33,7 @@ void Steganography::readCipherText(string fileName){
   cout << "max color: " << maxColor << endl;
 
   myFile.close();
+  //hello there
 }
 
 void Steganography::printCipherText(string fileName){}
