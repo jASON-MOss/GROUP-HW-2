@@ -14,14 +14,45 @@
 #include <string>
 using namespace std;
 
+
+/**
+ * Constructor for Phonebook
+ *
+ * @pre 
+ * @post 
+ * 
+ */
 Phonebook::Phonebook(){
   head = NULL;
 }
 
+
+/**
+ * deconstuctor
+ *
+ * @pre valid linked list
+ * @post linked list is destroyed
+ * 
+ */
 Phonebook::~Phonebook(){
-  
+  while(head != NULL){
+    delete head;
+    head = head ->next;
+  }
 }
 
+
+/**
+ * Pushes new data to front of the list
+ *
+ * @param string test User first name
+ * @param string newLast user last name
+ * @param string newPhone user phone number
+ * @pre valid linked list
+ * @return void 
+ * @post User has been added to front of list
+ * 
+ */
 void Phonebook::push_front(string test, string newLast, string newPhone){
   Node *insertData = new Node;
   insertData -> next = NULL;
@@ -32,6 +63,18 @@ void Phonebook::push_front(string test, string newLast, string newPhone){
   head = insertData;
 }
 
+
+/**
+ * Pushes new user to back of the list
+ *
+ * @param string item user first name
+ * @param string newLast user last name
+ * @param string newPhone user phone number
+ * @pre valid linked list
+ * @return void 
+ * @post user has been added to end of list
+ * 
+ */
 void Phonebook::push_back(string item, string newLast, string newPhone){
   Node *newItem = new Node;
   newItem -> next = NULL;
@@ -50,7 +93,17 @@ void Phonebook::push_back(string item, string newLast, string newPhone){
   }
 }
 
-void Phonebook::read_from_file(string fileName){//delete test couts
+
+/**
+ * reads data from file into linked list
+ *
+ * @param string fileName name of file
+ * @pre valid file and linked list
+ * @return void 
+ * @post data has been read into linked list
+ * 
+ */
+void Phonebook::read_from_file(string fileName){
   Node *read = new Node;
   ifstream myFile;
   string junk;
@@ -60,32 +113,37 @@ void Phonebook::read_from_file(string fileName){//delete test couts
   myFile.open(fileName);
   while(!myFile.eof()){
     if(head == NULL){
-      cout << "HELLO WORLD" << endl;
       head = read;
     }
-    cout << "DOING FIRST" << endl;
     myFile >> first;
-    cout << first << endl;
+    //cout << first << endl;
     myFile >> last;
-    cout << last << endl;
+    //cout << last << endl;
     getline(myFile, junk);
     getline(myFile, phoneNum);
-    cout << phoneNum << endl;
+    //cout << phoneNum << endl;
     read ->first_name = first;
-    cout << "first name: " << read ->first_name << endl;
     read ->last_name = last;
-    cout << "last name: " << read ->last_name << endl;
     read ->number = phoneNum;
-    cout << "number: " << read -> number << endl;
     if(!myFile.eof()){
       read ->next = new Node;
       read = read ->next;
     }
-    //myFile >> first;
   }
   myFile.close();
-  }
+}
 
+
+
+/**
+ * writed linked list to a file
+ *
+ * @param string fileName name of file
+ * @pre valid linked list and file
+ * @return void 
+ * @post linked list has been written to a file
+ * 
+ */
 void Phonebook::write_to_file(string fileName){
   ofstream myFile;
   Node *write;
@@ -107,6 +165,18 @@ void Phonebook::write_to_file(string fileName){
   myFile.close();
 }
 
+
+/**
+ * Sorts the list in alphabetical order and inserts the new user where it is supposed to be in that list
+ *
+ * @param string item user first name
+ * @param string lastN user last name
+ * @param string phone user phone number
+ * @pre valid linked list
+ * @return void 
+ * @post The list is now in alphabetical order and the new user is inserted into it
+ * 
+ */
 void Phonebook::insert_sorted(string item, string lastN, string phone){
   Node *inserted = new Node;
   inserted ->next = NULL;
@@ -117,7 +187,6 @@ void Phonebook::insert_sorted(string item, string lastN, string phone){
   Node *sort = head;
   if(head == NULL){
     head = inserted;
-    cout << "DONE" << endl;
   }
   if(sort ->next == NULL){
     sort -> next = inserted;
@@ -127,7 +196,7 @@ void Phonebook::insert_sorted(string item, string lastN, string phone){
     }
   }else{
     for(Node *i = head; i ->next != NULL; i = i ->next){
-      for(Node *j = i ->next; j != NULL; j = j ->next){//j = i ->next
+      for(Node *j = i ->next; j != NULL; j = j ->next){
 	if(i ->last_name > j ->last_name){
 	  Node *tempPlace = new Node;
 	  tempPlace ->first_name = i ->first_name;
@@ -139,8 +208,6 @@ void Phonebook::insert_sorted(string item, string lastN, string phone){
 	  j ->first_name = tempPlace ->first_name;
 	  j ->last_name = tempPlace ->last_name;
 	  j ->number = tempPlace ->number;
-	  cout << "new last name: " << i ->last_name << endl;
-	  cout << "j last name: " << j ->last_name << endl;
 	}
       }
     }
@@ -156,6 +223,16 @@ void Phonebook::insert_sorted(string item, string lastN, string phone){
   }
 }
 
+
+/**
+ * Looks up a user's phone number by last name
+ *
+ * @param string name user first name
+ * @pre valid linked list and last name
+ * @return string phone number
+ * @post phone number has been found
+ * 
+ */
 string Phonebook::lookup(string name){
   Node *look;
   look = head;
@@ -176,6 +253,16 @@ string Phonebook::lookup(string name){
   }
 }
 
+
+/**
+ * Looks up user based on phone number
+ *
+ * @param string phoneNum user phone number
+ * @pre valid linked list and user
+ * @return string user name
+ * @post user name is given
+ * 
+ */
 string Phonebook::reverse_lookup(string phoneNum){
   Node *phoneSearch;
   phoneSearch = head;
@@ -196,6 +283,15 @@ string Phonebook::reverse_lookup(string phoneNum){
   }
 }
 
+
+/**
+ * prints the the contents of the linked list
+ *
+ * @pre valid linked list
+ * @return void 
+ * @post linked list has been printed
+ * 
+ */
 void Phonebook::print(){
   Node *print;
   cout << "Head-->";
@@ -211,6 +307,16 @@ void Phonebook::print(){
   }
 }
 
+
+/**
+ * deletes a user
+ *
+ * @param string firstName user first name
+ * @pre valid user and linked list
+ * @return void 
+ * @post user has been deleted
+ * 
+ */
 void Phonebook::delete_user(string firstName){//use similar thing for lookup stuff
   Node *temp;
   Node *remove;
