@@ -45,9 +45,9 @@ class Library{
   
   void insert_sorted(string bookName, string author, int numPages, string isbnNum, float price, int yearReleased);
   
-  string find_author(string name);
+  void find_author(string name);
   
-  string find_album(string bookName);
+  void find_album(string bookName);
   
   void print();
   
