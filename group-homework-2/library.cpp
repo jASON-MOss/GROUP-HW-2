@@ -16,10 +16,12 @@
 #include <string>
 using namespace std;
 
+//constructor
 Library::Library(){
   head = NULL;
 }
 
+//deconstructor
 Library::~Library(){
   while(head != NULL){
     Book *temp;
@@ -30,6 +32,8 @@ Library::~Library(){
   delete head;
 }
 
+
+//adds new entry to start of the list
 void Library::push_front(string bookName, string author, int numPages, string isbnNum, float price, int yearReleased){
   Book *insertData = new Book;
   insertData ->next = NULL;
@@ -43,6 +47,7 @@ void Library::push_front(string bookName, string author, int numPages, string is
   head = insertData;
 }
 
+//adds entry to end of list
 void Library::push_back(string bookName, string author, int numPages, string isbnNum, float price, int yearReleased){
   Book *newBook = new Book;
   newBook ->next = NULL;
@@ -57,6 +62,7 @@ void Library::push_back(string bookName, string author, int numPages, string isb
     head = newBook;
   }else{
     Book *end = head;
+    //moving to the end of list
     while(end ->next != NULL){
       end = end ->next;
     }
@@ -79,6 +85,7 @@ void Library::read_from_file(string fileName){
     if(head == NULL){
       head = read;
     }
+    //getting data from file
     getline(myFile, book);
     getline(myFile, authorName);
     myFile >> pages;
@@ -88,7 +95,7 @@ void Library::read_from_file(string fileName){
     myFile >> release;
     getline(myFile, junk);
 
-
+    //putting the data in the list
     read ->title = book;
     read ->authorName = authorName;
     read ->pages = pages;
@@ -107,6 +114,7 @@ void Library::insert_sorted(string bookName, string author, int numPages, string
   string entryInserted = "no";
   cout << "STARTING INSERT SORTED FUNCTION" << endl;
   Book *inserted = new Book;
+  //getting new entry
   inserted ->next = NULL;
   inserted ->title = bookName;
   inserted ->authorName = author;
@@ -115,17 +123,16 @@ void Library::insert_sorted(string bookName, string author, int numPages, string
   inserted ->coverPrice = price;
   inserted ->year = yearReleased;
 
-  cout << "STARTING IF CONDITIONS" << endl;
+  //if there is no stuff in the list
   Book *sort = head;
   if(head == NULL){
     head = inserted;
   }
 
-  cout << "IF sort ->next == NULL" << endl;
+  //if there is one item in the list
   if(sort ->next == NULL){
-    cout << "TEST" << endl;
     sort ->next = inserted;
-    cout << "if sort ->next ->authorName < sort -> authorName" << endl;
+    //sorts
     if(sort ->next ->authorName < sort ->authorName){
       head = sort ->next;
       sort ->next = sort;
@@ -170,6 +177,7 @@ void Library::insert_sorted(string bookName, string author, int numPages, string
 	     entryInserted = "yes";
 	   }
 	}
+	//if no proper spot is found, entry is put at the end
 	if(list ->next == NULL && entryInserted == "no"){
 	  inserted ->next = list ->next;
 	  list ->next = inserted;
@@ -258,4 +266,4 @@ void Library::remove(string authorName, string bookName){
     delete remove;
   }
 
-}//delete just one book or all books written by author?
+}//deletes book
