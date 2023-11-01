@@ -13,12 +13,13 @@
 #include <iomanip>
 #include <fstream>
 #include <string>
+#include <list>
 #include "library.h"
 
 using namespace std;
 
 int main() {
-  Library myLibrary;
+  Library library;
   int num;
   string file;
 
@@ -44,17 +45,22 @@ int main() {
       cout << "Please enter the name of the file you wish to use: ";
       cin >> file;
       cout << endl;
-      myLibrary.read_from_file(file);
+      //myLibrary.read_from_file(file);
+      library.read_from_file(file);
     }
 
     //option 2
     if(num == 2){
-
+      string fileName;                                                            
+      cout << "Please enter the file you wish to write to: ";                     
+      cin >> fileName;                                                            
+      cout << endl;                                                               
+      library.write_file(fileName);                 
     }
 
     //option 3
     if(num == 3){
-      myLibrary.print();
+      library.print();
     }
     //option 4
     if(num == 4){
@@ -64,7 +70,8 @@ int main() {
       getline(cin, trash);
       getline(cin, author);
       cout << endl;
-      myLibrary.find_author(author);
+      //myLibrary.find_author(author);
+      library.find_author(author);
     }
     //option 5
     if(num == 5){
@@ -74,7 +81,7 @@ int main() {
       getline(cin, trash);
       getline(cin, BOOK);
       cout << endl;
-      myLibrary.find_album(BOOK);
+      library.find_album(BOOK);
     }
     //option 6
     if(num == 6){
@@ -106,7 +113,7 @@ int main() {
 	cout << endl << "What year was the book released? ";
 	cin >> year;
 	cout << endl;
-	myLibrary.push_back(bookName, author, pages, isbn, price, year);
+	library.push_back(bookName, author, pages, isbn, price, year);
       }
       
       if(entry == "f"){//push to front is selected
@@ -126,7 +133,8 @@ int main() {
         cout << endl << "What year was the book released? ";
         cin >> year;
         cout << endl;
-	myLibrary.push_front(bookName, author, pages, isbn, price, year);
+	//myLibrary was here
+	library.push_front(bookName, author, pages, isbn, price, year);
       }
     }
     //option 7
@@ -140,7 +148,7 @@ int main() {
       cout << endl << "Please enter book: ";
       getline(cin, BOOKNAME);
       cout << endl;
-      myLibrary.remove(AUTHOR, BOOKNAME);
+      library.remove(AUTHOR, BOOKNAME);
     }
 
     //option 8
@@ -169,8 +177,7 @@ int main() {
        cout << endl << "What year was the book released? ";
        cin >> year;
        cout << endl;
-
-       myLibrary.insert_sorted(bookName, author, pages, isbn, price, year);
+       library.insert_sorted(bookName, author, pages, isbn, price, year);
     }
   }
   return 0;

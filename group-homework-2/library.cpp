@@ -14,64 +14,128 @@
 #include <iomanip>
 #include <fstream>
 #include <string>
+#include <list>
 using namespace std;
 
-//constructor
+
+
+/**
+ * Constructor for library class
+ *
+ * @pre 
+ * @post constructor done
+ * 
+ */
 Library::Library(){
-  head = NULL;
+  
 }
 
-//deconstructor
+
+
+/**
+ * Deconstructor for Library class
+ *
+ * @pre valid library
+ * @post list has been deconstructed
+ * 
+ */
 Library::~Library(){
-  while(head != NULL){
-    Book *temp;
-    temp = head;
-    head = head ->next;
-    delete temp;
+  list<Book>::iterator it;
+  for(it = myLibrary.begin(); it != myLibrary.end(); it++){
+    it = myLibrary.erase(it);
   }
-  delete head;
 }
 
 
-//adds new entry to start of the list
+/**
+ * writes linked list to file
+ *
+ * @param string fileName valid file
+ * @pre valid file and linked list
+ * @return void 
+ * @post list has been written to the file
+ * 
+ */
+void Library::write_file(string fileName){
+  list<Book>::iterator it;
+  ofstream writeFile;
+  writeFile.open(fileName);
+  for(it = myLibrary.begin(); it != myLibrary.end(); it++){
+    writeFile << it ->title << endl;
+    writeFile << it ->authorName << endl;
+    writeFile << it ->pages << endl;
+    writeFile << it ->isbn << endl;
+    writeFile << it ->coverPrice << endl;
+    writeFile << it ->year << endl;
+  }
+  writeFile.close();
+}
+
+
+
+/**
+ * takes a new entry and pushes it to the front of the list
+ *
+ * @param string bookName name of book
+ * @param string author name of author
+ * @param int numPages number of pages
+ * @param string isbnNum isbn number
+ * @param float price the price of the book
+ * @param int yearReleased the year the book was released
+ * @pre valid entry
+ * @return void 
+ * @post new entry has been pushed to the front
+ * 
+ */
 void Library::push_front(string bookName, string author, int numPages, string isbnNum, float price, int yearReleased){
-  Book *insertData = new Book;
-  insertData ->next = NULL;
-  insertData ->title = bookName;
-  insertData ->authorName = author;
-  insertData ->pages = numPages;
-  insertData ->isbn = isbnNum;
-  insertData ->coverPrice = price;
-  insertData ->year = yearReleased;
-  insertData ->next = head;
-  head = insertData;
+  head.title = bookName;
+  head.authorName = author;
+  head.pages = numPages;
+  head.isbn = isbnNum;
+  head.coverPrice = price;
+  head.year = yearReleased;
+
+  myLibrary.push_front(head);
 }
 
-//adds entry to end of list
+
+
+/**
+ * Takes a new entry and add it to the back of the list
+ *
+ * @param string bookName name of book
+ * @param string author name of the author
+ * @param int numPages number of pages
+ * @param string isbnNum isbn number
+ * @param float price price of the book
+ * @param int yearReleased year the book was released
+ * @pre valid entry
+ * @return void 
+ * @post new entry has been added to the end of the list
+ * 
+ */
 void Library::push_back(string bookName, string author, int numPages, string isbnNum, float price, int yearReleased){
-  Book *newBook = new Book;
-  newBook ->next = NULL;
-  newBook ->title = bookName;
-  newBook ->authorName = author;
-  newBook ->pages = numPages;
-  newBook ->isbn = isbnNum;
-  newBook ->coverPrice = price;
-  newBook ->year = yearReleased;
+  
+  head.title = bookName;
+  head.authorName = author;
+  head.pages = numPages;
+  head.isbn = isbnNum;
+  head.coverPrice = price;
+  head.year = yearReleased;
 
-  if(head == NULL){
-    head = newBook;
-  }else{
-    Book *end = head;
-    //moving to the end of list
-    while(end ->next != NULL){
-      end = end ->next;
-    }
-    end ->next = newBook;
-  }
+  myLibrary.push_back(head);
 }
 
+/**
+ * Takes user entry for the file name, uses info from file to create linked list
+ *
+ * @param string fileName name of file
+ * @pre valid filename
+ * @return void 
+ * @post linked ist has been created from file
+ * 
+ */
 void Library::read_from_file(string fileName){
-  Book *read = new Book;
   ifstream myFile;
   string junk;
   string book;
@@ -82,9 +146,6 @@ void Library::read_from_file(string fileName){
   int release;
   myFile.open(fileName);
   while(!myFile.eof()){
-    if(head == NULL){
-      head = read;
-    }
     //getting data from file
     getline(myFile, book);
     getline(myFile, authorName);
@@ -96,174 +157,182 @@ void Library::read_from_file(string fileName){
     getline(myFile, junk);
 
     //putting the data in the list
-    read ->title = book;
-    read ->authorName = authorName;
-    read ->pages = pages;
-    read ->isbn = isbn;
-    read ->coverPrice = priceOf;
-    read ->year = release;
-    if(!myFile.eof() && read ->next == NULL){
-      read ->next = new Book;
-      read = read ->next;
-    }
+    head.title = book;
+    head.authorName = authorName;
+    head.pages = pages;
+    head.isbn = isbn;
+    head.coverPrice = priceOf;
+    head.year = release;
+    myLibrary.push_back(head);
   }
   myFile.close();
 }
 
+
+/**
+ * Sorts the linked list, add the new entry in the correct spot
+ *
+ * @param string bookName name of book
+ * @param string author name of the author
+ * @param int numPages number of pages
+ * @param string isbnNum isbn number
+ * @param float price price of the book
+ * @param int yearReleased year the book released
+ * @pre valid entry
+ * @return void 
+ * @post list has been sorted and the new entry is in the correct spot
+ * 
+ */
 void Library::insert_sorted(string bookName, string author, int numPages, string isbnNum, float price, int yearReleased){
   string entryInserted = "no";
   cout << "STARTING INSERT SORTED FUNCTION" << endl;
-  Book *inserted = new Book;
   //getting new entry
-  inserted ->next = NULL;
-  inserted ->title = bookName;
-  inserted ->authorName = author;
-  inserted ->pages = numPages;
-  inserted ->isbn = isbnNum;
-  inserted ->coverPrice = price;
-  inserted ->year = yearReleased;
+  head.title = bookName;
+  head.authorName = author;
+  head.pages = numPages;
+  head.isbn = isbnNum;
+  head.coverPrice = price;
+  head.year = yearReleased;
 
-  //if there is no stuff in the list
-  Book *sort = head;
-  if(head == NULL){
-    head = inserted;
-  }
+  myLibrary.push_back(head);
+  list<Book>::iterator it;
+  list<Book>::iterator ti;
+  cout << "Starting Loop" << endl;
+  for(it = myLibrary.begin(); it != myLibrary.end(); it++){
+    for(ti = it++; ti != myLibrary.end(); ti++){
+    list<Book>::iterator temp;
+    //do bubble sort
+      if(ti != myLibrary.end()){
+	if(it ->authorName > ti ->authorName){
+	  temp = it;
+	  cout << "Starting if statement" << endl;
+	  temp ->authorName = ti ->authorName;
+	  cout << "Author name moved" << endl;
+	  temp ->coverPrice = ti ->coverPrice;
+	  cout << "Cover price moved" << endl;
+	  temp ->isbn = ti ->isbn;
+	  cout << "isbn moved" << endl;
+	  temp ->pages = ti ->pages;
+	  cout << "pages moved" << endl;
+	  temp ->title = ti ->title;
+	  cout << "title moved" << endl;
+	  temp ->year = ti ->year;
 
-  //if there is one item in the list
-  if(sort ->next == NULL){
-    sort ->next = inserted;
-    //sorts
-    if(sort ->next ->authorName < sort ->authorName){
-      head = sort ->next;
-      sort ->next = sort;
+	  cout << "1" << endl;
+
+	   ti ->authorName = it ->authorName;
+	   ti ->coverPrice = it ->coverPrice;
+	   ti ->isbn = it ->isbn;
+	   ti ->pages = it ->pages;
+	   ti ->title = it ->title;
+	   ti ->year = it ->year;
+
+	   cout << "2" << endl;
+
+	   it ->authorName = temp ->authorName;
+	   it ->coverPrice = temp ->coverPrice;
+	   it ->isbn = temp ->isbn;
+	   it ->pages = temp ->pages;
+	   it ->title = temp ->title;
+	   it ->year = temp ->year;
+
+	   cout << "3" << endl;
+	}
+      }
     }
-  }else{
-      cout << "BEGINNING BUBBLE SORT" << endl;
-      for(Book *i = head; i ->next != NULL; i = i ->next){
-	for(Book *j = i ->next; j != NULL; j = j ->next){
-	  if(i ->authorName < j ->authorName){
-	    Book *tempPlace = new Book;
-	    tempPlace ->title = i ->title;
-	    tempPlace ->authorName = i ->authorName;
-	    tempPlace ->coverPrice = i ->coverPrice;
-	    tempPlace ->isbn = i ->isbn;
-	    tempPlace ->pages = i ->pages;
-	    tempPlace ->year = i ->year;
-	    i ->authorName = j ->authorName;
-	    i ->coverPrice = j ->coverPrice;
-	    i ->isbn = j ->isbn;
-	    i ->pages = j ->pages;
-	    i ->title = j ->title;
-	    i ->year = j ->year;
-	    j ->authorName = tempPlace ->authorName;
-	    j ->coverPrice = tempPlace ->coverPrice;
-	    j ->isbn = tempPlace ->isbn;
-	    j ->pages = tempPlace ->pages;
-	    j ->title = tempPlace ->title;
-	    j ->year = tempPlace ->year;
-	  }
-	}
-      }
-      cout << "SORTING DONE!" << endl;
-      Book *list = new Book;
-      list = head;
-      while(list != NULL){
-	cout << "SEARCHING..." << endl;
-	if(list ->next != NULL){
-	   if(inserted ->authorName > list ->next ->authorName && inserted ->authorName < list ->authorName){
-	     cout << "SPOT FOUND! INSERTING..." << endl;
-	     inserted ->next = list ->next;
-	     list ->next = inserted;
-	     entryInserted = "yes";
-	   }
-	}
-	//if no proper spot is found, entry is put at the end
-	if(list ->next == NULL && entryInserted == "no"){
-	  inserted ->next = list ->next;
-	  list ->next = inserted;
-	  list = list ->next;
-	}
-	list = list ->next;
-      }
   }
 }
 
+
+/**
+ * Takes an author and prints out all the books the author has written
+ *
+ * @param string name name of the author
+ * @pre valid entry
+ * @return void 
+ * @post Books are printed
+ * 
+ */
 void Library::find_author(string name){
-  Book *find;
-  find = head;
-  while(find != NULL){
-    if(find ->authorName == name){
-      cout << "Book: " << find ->title << endl;
-      cout << "Pages: " << find ->pages << endl;
-      cout << "isbn: " << find ->isbn << endl;
-      cout << "Price: " << find ->coverPrice << endl;
-      cout << "Year of Release: " << find ->year << endl;
+  list<Book>::iterator it;
+  for(it = myLibrary.begin(); it != myLibrary.end(); it++){
+    if(it ->authorName == name){
+      cout << "Book: " << it ->title << endl;
+      cout << "Pages: " << it ->pages << endl;
+      cout << "isbn: " << it ->isbn << endl;
+      cout << "Price: " << it ->coverPrice << endl;
+      cout << "Year of Release: " << it ->year << endl;
       cout << endl;
     }
-    find = find ->next;
   }
 }//lookup and print all books wtitten by author
 
+
+/**
+ * Takes a book name and prints info on all books with the same name
+ *
+ * @param string bookName name of the book
+ * @pre valid list valid entry
+ * @return void 
+ * @post Similar books are printed
+ * 
+ */
 void Library::find_album(string bookName){
-  Book *album;
-  album = head;
-  while(album != NULL){
-    if(album ->title == bookName){
+  list<Book>::iterator it;
+  for(it = myLibrary.begin(); it != myLibrary.end(); it++){
+    if(it ->title == bookName){
       cout << "Printing album..." << endl;
-      cout << "Book: " << album ->title << endl;
-      cout << "Author: " << album ->authorName << endl;
-      cout << "Number of Pages: " << album ->pages << endl;
-      cout << "ISBN: " << album ->isbn << endl;
-      cout << "Year Released: " << album ->year << endl;
-      cout << "Price: " << album ->coverPrice << endl;
+      cout << "Book: " << it ->title << endl;
+      cout << "Author: " << it ->authorName << endl;
+      cout << "Number of Pages: " << it ->pages << endl;
+      cout << "ISBN: " << it ->isbn << endl;
+      cout << "Year Released: " << it ->year << endl;
+      cout << "Price: " << it ->coverPrice << endl;
+      cout << endl;
     }
-    album = album ->next;
   }
 }//reverse lookup and prints all info on all books with a given name(Books that are in a series?)
 
+
+/**
+ * prints the linked list to the screen
+ *
+ * @pre valid list
+ * @return void 
+ * @post list has been printed to the screen
+ * 
+ */
 void Library::print(){
-  Book *print;
-  print = head;
-  cout << "Books in list: " << endl;
-  while(print != NULL){
-    cout << "Title: " << print ->title << endl;
-    cout << "Author: " << print ->authorName << endl;
-    cout << "Number of pages: " << print ->pages << endl;
-    cout << "ISBN: " << print ->isbn << endl;
-    cout << "Price: " << print ->coverPrice << endl;
-    cout << "Year of Release: " << print ->year << endl;
-    if(print ->next != NULL){
-      cout << "MOVING ON TO NEXT BOOK..." << endl;
-      cout << endl;
-    }else{
-      cout << "END OF BOOK LIST" << endl;
-      cout << endl;
-    }
-    print = print ->next;
+  list<Book>::iterator it;
+  cout << "Printing Books..." << endl;
+  for(it = myLibrary.begin(); it!= myLibrary.end(); it++){
+    cout << "Title: " << it ->title << endl;
+    cout << "Author: " << it ->authorName << endl;
+    cout << "Number of Pages: " << it ->pages << endl;
+    cout << "ISBN: " << it ->isbn << endl;
+    cout << "Price: " << it ->coverPrice << endl;
+    cout << "Year of Release: " << it ->year << endl;
+    cout << endl << endl;
   }
+  cout << "DONE PRINTING" << endl;
 }
 
+
+/**
+ * removes an entry from the list based on the author name and the book name
+ *
+ * @param string authorName name of author
+ * @param string bookName name of book
+ * @pre valid list and valid entry
+ * @return void 
+ * @post entry has been removed
+ * 
+ */
 void Library::remove(string authorName, string bookName){
-  Book *temp;
-  Book *remove;
-  if(head == NULL){
-    return;
-  }else if(head ->authorName == authorName && head ->title == bookName){
-    remove = head;
-    head = head->next;
-    delete remove;
-  }else{
-    temp = head;
-    while(temp->next != NULL && temp->next->authorName != authorName && temp ->title != bookName){
-      temp = temp -> next;
+  list<Book>::iterator it;
+  for(it = myLibrary.begin(); it != myLibrary.end(); it++){
+    if(it ->authorName == authorName && it ->title == bookName){
+     it = myLibrary.erase(it);
     }
-    if(temp -> next == NULL){
-      return;
-    }
-
-    remove = temp -> next;
-    temp -> next = remove -> next;
-    delete remove;
   }
-
 }//deletes book
